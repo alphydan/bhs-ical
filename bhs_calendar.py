@@ -5,13 +5,11 @@ import re
 import csv
 
 '''
-These are a collection of functions to build a School calendar.
-They are used to:
+Functions to build a School calendar. Used to:
 
 - export our daily schedule to Google Calendar (or iCalendar)
 - find out how many days are left of each class / year / etc
 - find out how many hours are left of each lesson
-
 '''
 
 ###########
@@ -22,9 +20,10 @@ They are used to:
 # import this year's schedule (lists of datetime and tuples of datetimes)
 from dates_and_breaks import staff_induction, staff_prof_development, \
                              breaks, first_day, last_day, current_yr, \
-                             half_days, public_holidays
+                             half_days, public_holidays, secondary
 
-# What period is at what time? (import dictionary with the info)
+# What period is at what time? eg. period 1 from 8:40 - 9:45
+# (import dictionary with the info)
 from schedule_times import schedule_times
 
 
@@ -48,15 +47,13 @@ timetable.close()
 
 # Let's make a list with the days which are not teaching days (no lessons)
 # we can combine the lists of induction, prof. dev., breaks and last day
-no_school = breaks + public_holidays + staff_induction + staff_prof_development + last_day
-
+no_school = breaks + public_holidays + staff_induction + \
+            staff_prof_development + last_day
 
 d_o_t = [first_day[0]]  # days of teaching
 a_day = td(days=1)  # timedelta of a day
+
 next_day = first_day[0] + a_day
-
-
-
 while next_day != last_day[0]:
     if (next_day.weekday() != 5) and (next_day.weekday() != 6):
         # .weekday -> {0 : "Monday", 1 : "Tuesday", etc ..}
@@ -174,7 +171,6 @@ def create_calendar(days_of_teaching, timetable_dict, schedule_times):
     simple_cal = append_day_number(days_of_teaching)
     full_calendar = []
     for day in simple_cal:
-        # print day[0], day[1]
         full_calendar.append([day[0], day[1],
                             timetable_dict[day[1]]]
                             )

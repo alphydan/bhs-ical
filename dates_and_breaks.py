@@ -8,6 +8,21 @@ current_yr = 2015
 staff_induction = [dt(current_yr, 8, 27),
                    dt(current_yr, 8, 28)]
 
+# Secondary Meetings
+secondary_meetings = [[dt(current_yr, 12, 15, 15, 45), "IB"],
+                      [dt(current_yr+1, 1, 5, 15, 45), "HoD and HoY"],
+                      [dt(current_yr+1, 1, 12, 15, 45), "Dept. Meeting"],
+                      [dt(current_yr+1, 1, 19, 15, 45), "T&L Prof. Learning Groups"],
+                      [dt(current_yr+1, 1, 26, 15, 45), "IB"],
+                      [dt(current_yr+1, 2, 2, 15, 45),  "Whole School Planning - Vertical"],
+                      [dt(current_yr+1, 2, 16, 15, 45), "PTC Yr 9"],
+                      [dt(current_yr+1, 2, 23, 15, 45), "Dept. Meeting"],
+                      [dt(current_yr+1, 3, 1, 15, 45), "HoD and HoY"],
+                      [dt(current_yr+1, 3, 8, 15, 45), "PTC IB1"],
+                      [dt(current_yr+1, 3, 15, 15, 45), "Dept. Meeting"],
+                      [dt(current_yr+1, 3, 22, 15, 45), "T&L Professional Learning Groups"],]
+
+
 # Professional development days for staff
 staff_prof_development = [dt(current_yr, 8, 31),
                           dt(current_yr, 9, 1),
@@ -55,4 +70,7 @@ for br in _breaks:
             breaks.append(next_day)
             next_day = next_day + a_day
 
-print breaks
+
+x = ['a', 'b', 'c']
+
+
