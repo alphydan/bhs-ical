@@ -22,7 +22,6 @@ for x in full_calendar:
         event.add('dtend', lesson[3])
         datestring = "%s" % lesson[3]
         anid = (lesson[0] + datestring).replace(' ', '').replace(':', '').replace('-', '')
-        print anid
         event['uid'] = anid
 
         mycal.add_component(event)
