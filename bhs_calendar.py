@@ -15,13 +15,13 @@ Functions to build a School calendar. Used to:
 ###########
 # Imports #
 
-from dates_and_breaks import first_day, last_day, current_yr, staff_induction,\
-                             staff_prof_development, secondary_meetings, \
-                             half_days, sports_day, performing_arts_day, \
-                             breaks, public_holidays, no_teaching, steam_week,\
-                             unique_special_days
+from dates_and_breaks import first_day, last_day, staff_prof_development, \
+                                secondary_meetings, half_days, sports_day, \
+                                performing_arts_day, breaks, public_holidays, \
+                                no_teaching, steam_week, unique_special_days
 
-from calendar_statistics import days_of_teaching_sofar
+
+
 
 # What period is at what time? eg. period 1 from 8:40 - 9:45
 # (import dictionary with the info)
@@ -128,12 +128,8 @@ def add_special_days_to_calendar(full_calendar):
 full_calendar = create_calendar(d_o_t, timetable_dict, schedule_times)
 new_full_calendar = add_special_days_to_calendar(full_calendar)
 
-for x in new_full_calendar:
-    print x
-
-# for x in full_calendar:
+# for x in new_full_calendar:
 #     print x
-
 
 
 # dates_intervals_to_exclude = [

@@ -4,6 +4,11 @@ from icalendar import Calendar, Event, vText
 import pytz
 import tempfile, os
 
+from calendar_statistics import *
+
+########################################
+##### WARNING -> Spaguetti Code ahead!!
+########################################
 
 def time_string_to_deltatime(time_string):
     '''
@@ -23,10 +28,10 @@ def calendar_day_2timetable(full_calendar_day, schedule_times):
         full_calendar_day:
         [datetime.datetime(2016, 6, 1, 0, 0),
         4, ['IB2 Reg. @7', '','Y11 Science @PL', '',
-        'Y11 Phys 1 @PR', '9A Sc @PL'],]
+        'Y11 Phys 1 @PR', '9A Sc @PL','Lunch Duties @IB'],]
 
         the schedule_times:
-        {0: ("8:20", "8:40"), ...}  time of each period
+        {0: ("8:20", "8:40"), ...,'L': ("12:20","13:10")}  time of each period
 
         and converts it to a list of events.
         Each event is a tuple with the location, description and
@@ -64,8 +69,13 @@ def calendar_day_2timetable(full_calendar_day, schedule_times):
                 end_of_lesson = full_calendar_day[0] + time_string_to_deltatime(schedule_times[lesson_nr][1])
                 events_of_the_day.append((lesson_description, lesson_location, start_of_lesson, end_of_lesson))
 
-    print events_of_the_day
     return events_of_the_day
+
+
+###############################
+# Create the iCalendar Object
+#      And Populate it.
+###############################
 
 
 mycal = Calendar()
@@ -78,7 +88,6 @@ mycal.add('version', '2.0')
 
 for x in new_full_calendar:
     for lesson in calendar_day_2timetable(x, schedule_times):
-        # print lesson
         event = Event()
         event.add('summary', lesson[0])
         event['location'] = vText(lesson[1])
@@ -94,8 +103,102 @@ for x in new_full_calendar:
     event.add('summary', '[day %01d]' % x[1])
     event.add('dtstart', x[0])
     event.add('dtend', x[0]) # all day event (will appear at start of day)
-    # print x
     mycal.add_component(event)
+
+# Let's add meetings
+
+def add_meetings(mycal, secondary_meetings, staff_prof_development):
+    '''
+     goes through list of meetings:
+     [datetime.datetime(2017, 1, 17, 15, 45), 'Secondary Staff']
+     and converts them to an event string:
+     ('Secondary Staff', '', datetime.datetime(2017, 1, 17, 15, 45),
+     datetime.datetime(2017, 1, 17, 15, 45))
+     '''
+    plus_an_hour = td(hours=1, minutes=0)
+    plus_a_working_day = td(hours=7, minutes=0)
+    for ameeting in secondary_meetings:
+        event = Event()
+        event.add('summary', ameeting[1]+' meeting') # eg. 'Department meeting'
+        event['location'] = ''
+        event.add('dtstart', ameeting[0])
+        event.add('dtend', ameeting[0]+plus_an_hour)
+        datestring = "%s" % ameeting[0]
+        anid = (ameeting[1] + datestring).replace(' ', '').replace(':', '').replace('-', '')
+        event['uid'] = anid
+        mycal.add_component(event)
+
+    for pd_day in staff_prof_development:
+        event = Event()
+        event.add('summary', 'Professional Development')
+        event.add('description', 'Professional Development')
+        event['location'] = 'BHS'
+        event.add('dtstart', pd_day)
+        event.add('dtend', pd_day+plus_a_working_day)
+        datestring = "%s" % pd_day
+        anid = ('ProDevel' + datestring).replace(' ', '').replace(':', '').replace('-', '')
+        event['uid'] = anid
+        mycal.add_component(event)
+
+def collect_monday_statistics(new_full_calendar, list_of_lessons):
+    '''
+    do the lesson statistics for every monday and save it
+    to a list with:
+    [date, [statsIB1], [statsIB2], ..etc]
+    '''
+    monday_stats = []
+    for aday in new_full_calendar:
+        if aday[0].weekday() == 0:
+            daystats = get_lesson_count_list(list_of_lessons, aday[0])
+            monday_stats.append(daystats)
+    return monday_stats
+
+def format_stats_description(day_done_left, amonday):
+        '''
+        Creates string to display on Mondays
+        '''
+        days_string = \
+        '''You have %s days of teaching left (excluding half days, holidays, PD days) and have taught %s days so far \n\n''' \
+        % (day_done_left[1], day_done_left[0])
+
+        lesson_string =""
+        for lesson in amonday[1:]:
+            sub_lesson_string = '''%s: %s LESSONS TAUGHT | %s LESSONS LEFT \n\n''' % \
+            (lesson[0], lesson[1][0], lesson[1][1])
+            lesson_string = lesson_string + sub_lesson_string
+
+        full_string = days_string + lesson_string + '''This excludes study leave and exams. \n\n DISCLAIMER: You may have fewer lessons than indicated here due to the usual suspects: Torch Day, Days out, trips, etc.'''
+
+        return full_string
+
+
+def add_monday_statistics(mycal, monday_stats):
+    for amonday in monday_stats:
+        day_done_left = days_of_teaching_sofar(d_o_t, amonday[0])
+
+        event = Event()
+        event.add('summary', 'STATS THIS WEEK') # eg. 'Department meeting'
+        event['location'] = ''
+        event.add('dtstart', amonday[0]+td(hours=7, minutes=0))
+        event.add('dtend', amonday[0]+td(hours=8, minutes=0))
+
+        description_string = format_stats_description(day_done_left, amonday)
+        print description_string, '\n', '#####################', '\n'
+
+        event.add('description', description_string)
+        datestring = "%s" % amonday[0]
+        days_string = "%s%s" % (day_done_left[0], day_done_left[1])
+        anid = (datestring+days_string).replace(' ', '').replace(':', '').replace('-', '')
+        event['uid'] = anid
+        mycal.add_component(event)
+
+monday_statistics = collect_monday_statistics(new_full_calendar, list_of_lessons)
+
+
+add_meetings(mycal, secondary_meetings, staff_prof_development)
+add_monday_statistics(mycal, monday_statistics)
+
+# add_statistics(mycal, all_mondays_lessons_and_count)
 
 
 
@@ -118,7 +221,7 @@ for x in new_full_calendar:
 
 
 # Write to file
-f = open('example.ics', 'wb')
+f = open('BHS_Calendar_2016_afeito.ics', 'wb')
 f.write(mycal.to_ical())
 f.close()
 

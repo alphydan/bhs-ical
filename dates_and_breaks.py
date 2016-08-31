@@ -3,6 +3,26 @@ from datetime import datetime as dt
 from datetime import timedelta as td
 from collections import OrderedDict  # to remove duplicates from list
 
+
+
+def expand_date_intervals(date_interval):
+  '''
+  input: list with tuples of date [(start-date, end-date), (start-date,end-date)]
+  output: expanded list with all dates between the dates in tupples
+  '''
+  a_day = td(days=1)
+  all_dates = []
+  for x in date_interval:
+    if x[0] == x[1]:  # single day break
+      all_dates.append(x[0])
+    else:  # multi-day holiday
+      all_dates.append(x[0])
+      next_day = x[0] + a_day
+      while next_day != (x[1] + a_day):
+        all_dates.append(next_day)
+        next_day = next_day + a_day
+  return all_dates
+
 current_yr = 2016
 
 first_day = [dt(current_yr, 9, 7)]
@@ -14,12 +34,12 @@ staff_induction = [dt(current_yr, 8, 29),
                    ]
 
 # Professional development days for staff
-staff_prof_development = [dt(current_yr, 8, 31),
-                          dt(current_yr, 9, 1),
-                          dt(current_yr, 9, 2),
-                          dt(current_yr, 9, 6),
-                          dt(current_yr+1, 1, 3),
-                          dt(current_yr+1, 4, 17),
+staff_prof_development = [dt(current_yr, 8, 31, 8, 30),
+                          dt(current_yr, 9, 1, 8, 30),
+                          dt(current_yr, 9, 2, 8, 30),
+                          dt(current_yr, 9, 6, 8, 30),
+                          dt(current_yr+1, 1, 3, 8, 30),
+                          dt(current_yr+1, 4, 17, 8, 30),
                           ]
 
 
@@ -100,18 +120,7 @@ steam_week = [
               ]
 
 # Define the full list of break days
-breaks = []
-a_day = td(days=1)  # timedelta of a day
-
-for br in _breaks:
-    if br[0] == br[1]:  # single day break
-        breaks.append(br[0])
-    else:  # multi-day holiday
-        breaks.append(br[0])
-        next_day = br[0] + a_day
-        while next_day != (br[1] + a_day):
-            breaks.append(next_day)
-            next_day = next_day + a_day
+breaks = expand_date_intervals(_breaks)
 
 
 # Let's make a list with the days which are not teaching days (no lessons)
@@ -134,3 +143,33 @@ unique_special_days = list(OrderedDict.fromkeys(special_days))
 
 no_teaching = unique_no_teaching
 special_days = unique_special_days
+
+
+IB2_study_n_exams_period = [
+                      (dt(current_yr+1, 2, 20), dt(current_yr+1, 3, 3)),
+                      (dt(current_yr+1, 4, 24), dt(current_yr+1, 6, 29))
+                      ]
+
+Y11_study_n_mock_period = [
+                    (dt(current_yr+1, 2, 20), dt(current_yr+1, 3, 3)),
+                    (dt(current_yr+1, 5, 8), dt(current_yr+1, 6, 29))
+                   ]
+
+IB1_study_n_exams_period = [
+                    (dt(current_yr+1, 5, 29), dt(current_yr+1, 6, 9))
+                        ]
+
+Y10_study_n_exams_period = [
+                    (dt(current_yr+1, 5, 29), dt(current_yr+1, 6, 9))
+                        ]
+
+Y987_study_n_exams_period = [
+                    (dt(current_yr+1, 6, 5), dt(current_yr+1, 6, 9))
+                        ]
+
+
+IB2_study_n_exams = expand_date_intervals(IB2_study_n_exams_period)
+IB1_study_n_exams = expand_date_intervals(IB1_study_n_exams_period)
+Y11_study_n_exams = expand_date_intervals(Y11_study_n_mock_period)
+Y10_study_n_exams = expand_date_intervals(Y10_study_n_exams_period)
+Y987_study_n_exams = expand_date_intervals(Y987_study_n_exams_period)
