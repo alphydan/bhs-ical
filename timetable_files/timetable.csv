@@ -1,7 +1,7 @@
-Day,Registration,1,2,3,4,5
-1,Y10C Reg. @42,Y10 Phys 6 @PL,Y9 Sc @PL,IB2 Phys @PL,IB1 Phys @PL,
-2,Y10C Reg. @42,,Y8 Sc @BL,,Y11 Phys @PL,Y10 Phys 6 @PL
-3,Y10C Reg. @42,IB1 Phys @4A,Y8 Sc @37,Y9 Sc @PL,,IB2 Phys @8
-4,Y10C Reg. @42,Y11 Phys @40,,Y9 Sc @PL,Y10 Phys 1 @PL,
-5,Y10C Reg. @42,Y8 Sc @PL,IB2 Phys @PL,,IB1 Phys @PL,Y10 Phys 6 @AV
-6,Y10C Reg. @42,Y11 Phys @PL,Y10 Phys 1 @26,,Y9 Sc @38,Y8 Sc @BL
+Day,Registration,1,2,3,4,5,Lunch Duties
+1,Y10C Reg. @42,Y10 Phys 6 @PL,Y9 Sc @PL,IB2 Phys @PL,IB1 Phys @PL,,
+2,Y10C Reg. @42,,Y8 Sc @BL,,Y11 Phys @PL,Y10 Phys 6 @PL,
+3,Y10C Reg. @42,IB1 Phys @4A,Y8 Sc @37,Y9 Sc @PL,,IB2 Phys @8,
+4,Y10C Reg. @42,Y11 Phys @40,,Y9 Sc @PL,Y10 Phys 1 @PL,,Lunch Duties @IB1
+5,Y10C Reg. @42,Y8 Sc @PL,IB2 Phys @PL,,IB1 Phys @PL,Y10 Phys 6 @AV,
+6,Y10C Reg. @42,Y11 Phys @PL,Y10 Phys 1 @26,,Y9 Sc @38,Y8 Sc @BL,
