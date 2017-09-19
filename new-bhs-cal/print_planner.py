@@ -61,16 +61,6 @@ def total_weekly_lessons(weekly_lesson_dictionary):
     return sum(weekly_lesson_dictionary.values())
 
 
-# Generate a dictionary with lists of lists:
-# we will use this to build the first planning
-# page for each week.
-# {'week monday': dict}
-# where
-# dict = {'0': [[datetime, lesson_nr, room], [datetime, lesson_nr, room], etc ],# for Y8
-#         '1': [[datetime, lesson_nr, room], [datetime, lesson_nr, room], etc ], # for Y10
-#         '2': # etc for Y11
-#         #etc for Y11(6), IB1, IB2 ...
-#         }
 
 
 def when_is_this_lesson(year_lesson_substring, day_data):

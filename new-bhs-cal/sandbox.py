@@ -243,10 +243,18 @@ def add_lesson_details(canvas, full_schedule_by_year, all_weeks):
                                          le)
 
 
-                            # day number left of the boxes:
+                            # day of the month left of the boxes:
                             c.drawString(left_margin-1.2*cm,
                                 height-top_margin-0.5*cm-box_unit_height*(add_day+0.5),
                                 aday[1].date.strftime("%d"))
+
+                            # day number left of the boxes:
+                            c.drawString(left_margin-1.1*cm,
+                                height-top_margin-0.5*cm-box_unit_height*(add_day+0.5)+2.1*cm,
+                                str(aday[1].day_number))
+                            c.circle(left_margin-1*cm,
+                                     height-top_margin-0.5*cm-box_unit_height*(add_day+0.5)+2.23*cm,
+                                     0.25*cm, stroke=1, fill=0)
 
 
         c.showPage() # finish page and move to next one
