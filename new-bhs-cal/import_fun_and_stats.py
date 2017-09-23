@@ -241,7 +241,7 @@ def count_lesson_days(bhs_calendar, lesson_string,
         leaves = [day_data._789_leave, day_data.y10_leave, day_data.y11_leave,
                   day_data.ib1_leave, day_data.ib2_leave]
         leave_index = [i for i, x in enumerate(leaves) if x]
-        leave_dict = {0: 'Y789 leave', 1: 'Y10 leave', 2: 'Y11 leave', 3: 'IB1 leave', 4: 'IB2 leave'}
+        leave_dict = {0: 'Y8 leave', 1: 'Y10 leave', 2: 'Y11 leave', 3: 'IB1 leave', 4: 'IB2 leave'}
 
         lesson_list = [day_data.L1, day_data.L2, day_data.L3, day_data.L4, day_data.L5]
 
