@@ -21,8 +21,8 @@ from import_fun_and_stats import add_half_a_day, add_special_day, \
 class SchoolDay(object):
     """Holds the properties of that day of the school calendar:
     - Is it a teaching day? (if so what is the schedule)
-    - What number-day is it?
-    - Is it a special day (Sports day? Arts & Performance?
+    - What number-day is it
+?    - Is it a special day (Sports day? Arts & Performance?
     - Is it a holliday? Part of Steam week?"""
 
     # def __init__(self, arg):
@@ -187,8 +187,8 @@ for a_day in cal_list:
         stat_dict['days_left_teaching'] = (nr_teaching_days - teaching_days_gone)
         stat_dict['days_taught'] = teaching_days_gone
         teaching_days_gone += 1
-
         for lesson_string in all_classes:
+            print lesson_string
             stat_dict[lesson_string+'-left'] = count_lesson_days(bhs_calendar,
                                             lesson_string, day_data.date, 'left')
             stat_dict[lesson_string+'-done'] = count_lesson_days(bhs_calendar,

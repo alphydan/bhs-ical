@@ -251,8 +251,10 @@ def count_lesson_days(bhs_calendar, lesson_string,
             if is_that_lesson_today > 0:
                 # which classes are on leave?
                 are_on_leave = [leave_dict[ind] for ind in leave_index]
+                # we use short_lesson_string to find 'Y11' instead of 'Y11 Phy 6' or 'Y11 Phy 1'
+                short_lesson_string = lesson_string.split(' ')[0]
                 is_that_lesson_on_leave = len([s for s in are_on_leave
-                                                if lesson_string in s])
+                                                if short_lesson_string in s])
                 if is_that_lesson_on_leave > 0:
                     pass
                 else:
