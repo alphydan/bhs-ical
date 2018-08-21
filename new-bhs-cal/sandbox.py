@@ -12,17 +12,20 @@ from print_planner import total_weekly_lessons, \
 
 from import_fun_and_stats import short_statistics
 
-c = canvas.Canvas("hello.pdf", pagesize=letter)
-c.setAuthor("Alvaro Feito Boirac")
-width, height = letter
 
-top_margin = 1*inch
-left_margin = 0.93*inch
-left_margin = 1.2*inch
-right_margin = 0.88*inch
-right_margin = 0.68*inch
-bottom_margin = 0.45*inch
 
+# Strategy:
+
+###########################################################################
+# 1. Count how many periods are in the week (eg. 15)                      #
+# 2. Make dict of periods for each class                                  #
+#    eg. {'Y8': 3, 'Y10BC': 2, 'Y10A': 1, 'Y11': 2 , 'IB1': 4, 'IB2': 3 } #
+# 3. Find optimal box arrangement, but always in same order. !!           #
+#    Typically up to 20 periods in a week (10 / 10)                       #
+#    But could be 7 / 7 or similar.                                       #
+#    For me the question is: Does Y11 stay left or right?                 #
+# 4. Draw boxes                                                           #
+###########################################################################
 
 
 # First class Pages
@@ -59,6 +62,7 @@ def draw_margins(c):
     c.line(0, 0.31*inch, width, 0.31*inch)  # bottom
     c.line(width-0.88*inch, 0, width-0.88*inch, height)  # right
     c.line(0, height-0.31*inch, width, height-0.31*inch)  # top
+
 
 #################
 # Lesson Boxes  #
@@ -303,11 +307,13 @@ def add_lesson_details(canvas, full_schedule_by_year, all_weeks):
                                      (aday[1].meeting, aday[1].date.strftime("%a %d"))
                     c.drawString(height/2, -width+1.2*cm, meeting_string) # 1.5cm for normal width
             if aday[1].date == monday:
-                leave = [aday[1]._789_leave, aday[1].y10_leave,
-                         aday[1].y11_leave, aday[1].ib1_leave,
-                         aday[1].ib2_leave]
+                leave = [aday[1].y7_leave, aday[1].y8_leave, aday[1].y9_leave,
+                         aday[1].y10_leave, aday[1].y11_leave,
+                         aday[1].ib1_leave, aday[1].ib2_leave]
                 if len(leave) > 0:
-                    leave_dict = {0: 'Y8', 1: 'Y10', 2: 'Y11', 3: 'IB1', 4: 'IB2' }
+                    leave_dict = {0: 'Y7 leave', 1: 'Y8 leave', 2: 'Y9 leave',
+                                  3: 'Y10 leave', 4: 'Y11 leave',
+                                  5: 'IB1 leave', 6: 'IB2 leave'}
                     whosonleave = [leave_dict[i] for i, Bool in enumerate(leave) if Bool == True]
                     if len(whosonleave) > 0:
                         leave_string = 'ON LEAVE: ' + ' - '.join(whosonleave)
@@ -322,16 +328,25 @@ def add_lesson_details(canvas, full_schedule_by_year, all_weeks):
 
 
 
+#################################
+# Let's Make the actual Canvas! #
+#################################
 
 
+
+width, height = letter
+top_margin = 1*inch
+left_margin = 0.93*inch
+left_margin = 1.2*inch
+right_margin = 0.88*inch
+right_margin = 0.68*inch
+bottom_margin = 0.45*inch
+
+c = canvas.Canvas("BHS_Paper_Planner.pdf", pagesize=letter)
+c.setAuthor("Alvaro Feito Boirac")
 
 add_lesson_details(c, full_schedule_by_year, all_weeks)
 
-
-
-
-# c.rect(5*cm, cm, 10*cm, 10*cm, fill=1)
-# c.rect(inch, inch, 6*inch, 9*inch, fill=1)
 # make text go straight up
 c.rotate(-90)
 # change color
@@ -340,46 +355,10 @@ c.setFillColorRGB(0.77, 0, 0.77)
 # c.drawString(3*inch, -3*inch, "Hello World")
 c.showPage()
 
-
-
 # Second Page
 c.setStrokeColorRGB(0.1, 0.1, 1) # blue
 # draw_margins(c)
 
 ### Header ###
 create_header(c, "Sept 11 - Sept 15")
-
-
-
 c.save()
-
-# coordinates: (x,y) (from left bottom corner)
-
-# The  showPage  method causes the  canvas  to stop drawing on the current page
-# and any further operations will draw on a subsequent page (if there are any
-# further operations -- if not no new page is created).
-# choose some colors
-# c.setStrokeColorRGB(0.2, 0.5, 0.3)
-# c.setFillColorRGB(0, 0, 0)
-
-# # Chose size of stroke
-# c.setLineWidth(1)
-# c.setStrokeColorRGB(0.1, 0.1, 1) # blue
-
-# def when_is_this_lesson(year_lesson_substring, day_data):
-#     '''
-#     input: string like 'Y8' or 'Y10'
-#     outpt: Lesson number when it's taught or False
-#     '''
-
-#     is_lesson_taught = [L for L in day_data.all_lessons
-#                         if year_lesson_substring in L]
-#     if len(is_lesson_taught) == 0:
-#         return False
-#     else:
-#         indx = [i+1 for i, L in enumerate(day_data.all_lessons)
-#                 if year_lesson_substring in L][0]
-#         lesson = is_lesson_taught
-#         return indx, lesson
-
-
