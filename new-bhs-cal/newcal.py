@@ -8,6 +8,7 @@ import pytz
 import csv
 import os
 
+from new_schedule_times import timetable_path_n_file, timetable_name
 from import_fun_and_stats import add_half_a_day, add_special_day, \
                                  add_PD_day, add_teaching_day, \
                                  count_teaching_days, count_lesson_days,\
@@ -41,7 +42,9 @@ class SchoolDay(object):
         # meeting can be 'secondary', 'all', 'ib', 'hod_hoy', 'dept' or None
         self.meeting = None  # or string
         self.staff_prof_dev = None  # or PD_day
-        self._789_leave = False
+        self.y7_leave = False
+        self.y8_leave = False
+        self.y9_leave = False
         self.y10_leave = False
         self.y11_leave = False
         self.ib1_leave = False
@@ -77,8 +80,7 @@ print random_day
 
 ###########################
 # Read Timetable CSV file #
-
-timetable = open('../timetable_files/timetable.csv', 'r',)
+timetable = open(timetable_path_n_file, 'rb')
 tt_reader = csv.reader(timetable)
 tt_headers = tt_reader.next()
 timetable_dict = {}
@@ -90,8 +92,8 @@ timetable.close()
 ###########################
 # Read Dates n Breaks CSV file #
 
-all_dates = open('dates_n_breaks.csv', 'r',)
-current_yr = 2017
+all_dates = open('dates_n_breaks_2018-2019.csv', 'r',)
+current_yr = 2018
 tt_reader = csv.reader(all_dates) # time table headers
 tt_headers = tt_reader.next()
 
@@ -139,15 +141,20 @@ for i, x in enumerate(all_dates_list):
 
         # write study leave data
         if x[9]:
-            this_day._789_leave = True
+            this_day.y7_leave = True
         if x[10]:
-            this_day.y10_leave = True
+            this_day.y8_leave = True
         if x[11]:
-            this_day.y11_leave = True
+            this_day.y9_leave = True
         if x[12]:
-            this_day.ib1_leave = True
+            this_day.y10_leave = True
         if x[13]:
+            this_day.y11_leave = True
+        if x[14]:
+            this_day.ib1_leave = True
+        if x[15]:
             this_day.ib2_leave = True
+
 
         # write schedule
         if x[3]:  # has a day number
@@ -173,7 +180,7 @@ for i, x in enumerate(all_dates_list):
 
 
 nr_teaching_days = count_teaching_days(bhs_calendar)
-all_classes = get_list_of_unique_lessons(timetable)
+all_classes = get_list_of_unique_lessons(timetable_path_n_file)
 
 cal_list = sorted(bhs_calendar.iteritems())
 teaching_days_gone = 0
@@ -188,7 +195,6 @@ for a_day in cal_list:
         stat_dict['days_taught'] = teaching_days_gone
         teaching_days_gone += 1
         for lesson_string in all_classes:
-            print lesson_string
             stat_dict[lesson_string+'-left'] = count_lesson_days(bhs_calendar,
                                             lesson_string, day_data.date, 'left')
             stat_dict[lesson_string+'-done'] = count_lesson_days(bhs_calendar,
@@ -207,7 +213,7 @@ for a_day in cal_list:
 ical = Calendar()
 
 # for compliance with ical format:
-ical.add('prodid', '-//My BHS Calendar/afeito//')
+ical.add('prodid', '-//My BHS Calendar/'+ timetable_name +'//')
 ical.add('version', '2.0')
 
 def add_day(ical, bhs_calendar):
@@ -227,9 +233,7 @@ add_day(ical, bhs_calendar)
 
 
 # Write to file
-f = open('BHS_Calendar_2018_afeito.ics', 'wb')
+output_file = 'calendar_'+ timetable_name + '.ics'
+f = open(output_file, 'wb')
 f.write(ical.to_ical())
 f.close()
-
-
-

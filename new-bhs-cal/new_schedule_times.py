@@ -18,3 +18,7 @@ plus_an_hour = td(hours=1, minutes=0)
 plus_a_lesson = td(hours=1, minutes=5)
 plus_half_a_day = td(hours=4, minutes=0)
 plus_a_working_day = td(hours=7, minutes=0)
+
+timetable_name = raw_input("What is the name of the timetable file? (without .csv ): ")
+timetable_path_n_file = '../timetable_files/' + str(timetable_name) + '.csv'
+# timetable_file = open(path_n_file, 'r',)
