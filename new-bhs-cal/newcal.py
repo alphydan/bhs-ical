@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # Class Based implementation of the BHS calendar
 from icalendar import Calendar, Event, vText
@@ -156,6 +157,7 @@ for i, x in enumerate(all_dates_list):
             this_day.ib2_leave = True
 
 
+
         # write schedule
         if x[3]:  # has a day number
             # get time table for that day (a list)
@@ -233,7 +235,7 @@ add_day(ical, bhs_calendar)
 
 
 # Write to file
-output_file = 'calendar_'+ timetable_name + '.ics'
+output_file = 'output/calendar_'+ timetable_name + '.ics'
 f = open(output_file, 'wb')
 f.write(ical.to_ical())
 f.close()

@@ -91,15 +91,15 @@ def short_statistics(day_data):
     dd = day_data
     list_of_short_stats = []
     for class_name in all_classes:
-        if len(class_name.split(' ')) > 2:
-            # if it is of the form 'Y11 Phy 6'
-            sub_string = class_name.split(' ')[0] + \
-            class_name.split(' ')[2] + ': %s /%s' % \
-           (day_data.stats[class_name+'-done'], day_data.stats[class_name+'-left'])
-        else:
-            # if it is of the form 'IB1'
-            sub_string = class_name.split(' ')[0]+ \
-            ': %s /%s' % \
+        # if len(class_name.split(' ')) > 2:
+        #     # if it is of the form 'Y11 Phy 6'
+        #     sub_string = class_name.split(' ')[0] + \
+        #     ' : %s / %s' %  \
+        #    (day_data.stats[class_name+'-done'], day_data.stats[class_name+'-left'])
+        # else:
+        # if it is of the form 'IB1'
+        sub_string = class_name.split(' ')[0]+ \
+            ' : %s / %s' % \
         (day_data.stats[class_name+'-done'], day_data.stats[class_name+'-left'])
         list_of_short_stats.append(sub_string)
 
@@ -313,14 +313,16 @@ def get_list_of_unique_lessons(timetable_path_n_file):
     unique_lessons = list(set(lessons_without_location))
     # remove empty lessons:
     unique_lessons = [x for x in unique_lessons if x]
-    # print unique_lessons
-    # unique_lessons.remove('Lunch Duties')
-    # unique_lessons.remove('Y10C Reg.')
-    # unique_lessons.remove('Lunch Duty')
-    # unique_lessons.remove('Y11B Reg.')
-    # unique_lessons.remove('Y7M Reg.')
-    # unique_lessons.remove('YIB1W Reg.')
-    return unique_lessons
+    # Sort them before returning them:
+    sorted_unique_lessons = []
+    all_class_strings = ['7', '8', '9', '10', '11', 'IB1', 'IB2']
+    for sub_str in all_class_strings:
+        matching = [s for s in unique_lessons if sub_str in s]
+        if matching:
+            for match in matching:
+                sorted_unique_lessons.append(match)
+
+    return sorted_unique_lessons
 
 
 '''
